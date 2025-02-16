@@ -15,13 +15,14 @@ from tensorflow.keras.preprocessing import image
 from PIL import UnidentifiedImageError
 from PIL import Image
 
-json_file = open('catanddog.json', 'r')
-loaded_model_json = json_file.read()
-json_file.close()
-loaded_model = model_from_json(loaded_model_json)
+# json_file = open('catanddog.json', 'r')
+# loaded_model_json = json_file.read()
+# json_file.close()
+# loaded_model = model_from_json(loaded_model_json)
 
-loaded_model.load_weights("catanddog.h5")
+# loaded_model.load_weights("catanddog.h5")
 # print("Loaded model from disk")
+loaded_model = tf.keras.models.load_model('catanddog.h5')
 
 st.title('Cats and Dogs Classification Using CNN')
 

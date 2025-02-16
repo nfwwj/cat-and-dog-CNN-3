@@ -26,7 +26,7 @@ loaded_model = tf.keras.models.load_model('catanddog.h5')
 
 st.title('Cats and Dogs Classification Using CNN')
 
-num_classes = ['Cat','Dog']
+
 
 genre = st.radio(
     "How You Want To Upload Your Image",
@@ -52,11 +52,12 @@ if ImagePath is not None:
 
 try:
     if st.button('Predict'):
-        test_image = tf.keras.utils.load_img(ImagePath,
+        loaded_single_image = tf.keras.utils.load_img(ImagePath,
                                               color_mode='rgb',
                                               target_size=(224, 224)) #edit to model input size
         
-        test_image = tf.keras.utils.img_to_array(test_image)
+        test_image = tf.keras.utils.img_to_array(loaded_single_image)
+        test_image /= 255
 
         test_image = np.expand_dims(test_image, axis=0)
 
@@ -71,9 +72,10 @@ try:
         st.header(classes[predict_output[0]])
 
         predicted_class = classes[predict_output[0]]
+        
         # Get the probability of the predicted class
         probability = softmax.numpy()[0][predict_output[0]]
-        st.header(f"Probability of {predicted_class}: {probability:.4f}")
+        st.header("Probability of" {predicted_class}":" {probability:.4f}*100":")
         
 
 except TypeError:

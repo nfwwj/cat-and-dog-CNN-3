@@ -74,8 +74,9 @@ try:
         predicted_class = classes[predict_output[0]]
         
         # Get the probability of the predicted class
-        probability = softmax.numpy()[0][predict_output[0]]
-        st.header("Probability of" {predicted_class}":" {probability:.4f}*100":")
+        probability = softmax.numpy()[0][predict_output[0]] * 100
+        # probability = predict_output[0][predicted_class_index] * 100 
+        st.header(f"Probability of {predicted_class}: {probability:.4f}%")
         
 
 except TypeError:

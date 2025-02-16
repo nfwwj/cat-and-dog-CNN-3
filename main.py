@@ -68,7 +68,7 @@ try:
         softmax = tf.nn.softmax(logits)
 
         predict_output = tf.argmax(logits, -1).numpy()
-        classes = ['cat','dog']
+        classes = ['Cat','Dog']
         st.header(classes[predict_output[0]])
 
         predicted_class = classes[predict_output[0]]
@@ -76,7 +76,7 @@ try:
         # Get the probability of the predicted class
         probability = softmax.numpy()[0][predict_output[0]] * 100
         # probability = predict_output[0][predicted_class_index] * 100 
-        st.header(f"Probability of {predicted_class}: {probability:.4f}%")
+        st.header(f"Probability of a {predicted_class}: {probability:.4f}%")
         
 
 except TypeError:

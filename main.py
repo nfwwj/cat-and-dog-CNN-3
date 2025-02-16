@@ -8,12 +8,12 @@ Original file is located at
 """
 
 import streamlit as st
+import tensorflow as tf
 from tensorflow.keras.models import Sequential, model_from_json
 import numpy as np
 from tensorflow.keras.preprocessing import image
 from PIL import UnidentifiedImageError
 from PIL import Image
-import tensorflow as tf
 
 json_file = open('catanddog.json', 'r')
 loaded_model_json = json_file.read()

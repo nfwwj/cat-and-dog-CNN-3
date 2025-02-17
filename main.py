@@ -74,7 +74,7 @@ for i, (image_name, image_path) in enumerate(example_images.items()):
         st.session_state.ImagePath = image_path  # Store in session state
         ImagePath = image_path  # Store the selected image path
 
-st.markdown("</div>", unsafe_allow_html=True)  # Close the div
+#st.markdown("</div>", unsafe_allow_html=True)  # Close the div
 
 st.markdown("---")  # Add a horizontal line
 

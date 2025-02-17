@@ -26,6 +26,10 @@ st.title('Cats and Dogs Classification Using CNN')
 
 num_classes = ['Cat','Dog']
 
+genre = st.radio(
+    "How You Want To Upload Your Image",
+    ('Browse Photos', 'Camera'))
+
 
 if genre == 'Camera':
     ImagePath = st.camera_input("Take a picture")

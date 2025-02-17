@@ -15,6 +15,8 @@ from PIL import UnidentifiedImageError
 from PIL import Image
 import tensorflow as tf
 from pathlib import Path
+import random
+from itertools import cycle
 
 
 # json_file = open('catanddog.json', 'r')

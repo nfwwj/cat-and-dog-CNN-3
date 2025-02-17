@@ -128,7 +128,7 @@ try:
 
         predict_output = tf.argmax(logits, -1).numpy()
         classes = ['Cat','Dog']
-        st.header('Prediction: ',classes[predict_output[0]])
+        st.header(f"Prediction: {classes[predict_output[0]]}")
 
         predicted_class = classes[predict_output[0]]
         

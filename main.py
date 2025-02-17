@@ -25,7 +25,7 @@ st.title('Cats and Dogs Classification Using CNN')
 st.write('This CNN image classification model was created on Python, and trained on Xception. It boasts an accuracy of approximately 98%.')
 st.write('It is also my school project.')
     # Insert a line or divider
-path = Path() 
+
 test_pictures = Path('TEST')
 file_list = list(test_pictures.glob("*"))
 selection = random.sample(file_list, 9)

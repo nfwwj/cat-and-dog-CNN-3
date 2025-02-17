@@ -49,37 +49,42 @@ example_images = {
 cols = st.columns(len(example_images))  # Create columns dynamically
 
 for i, (image_name, image_path) in enumerate(example_images.items()):
-    with cols[i]:  # Place each button in a separate column
         if st.button(image_name):  # Use image_name as the button label
             image_ = Image.open(image_path)
 
             st.image(image_, width=250)
 
-            loaded_single_image = tf.keras.utils.load_img(image_path,
+            try:
+                if st.button('Predict'):
+                    loaded_single_image = tf.keras.utils.load_img(ImagePath,
                                               color_mode='rgb',
                                               target_size=(224, 224)) #edit to model input size
         
-            test_image = tf.keras.utils.img_to_array(loaded_single_image)
-            test_image /= 255
+                    test_image = tf.keras.utils.img_to_array(loaded_single_image)
+                    test_image /= 255
 
-            test_image = np.expand_dims(test_image, axis=0)
+                    test_image = np.expand_dims(test_image, axis=0)
 
         
 
-            logits = loaded_model(test_image)
+                    logits = loaded_model(test_image)
         
-            softmax = tf.nn.softmax(logits)
+                    softmax = tf.nn.softmax(logits)
 
-            predict_output = tf.argmax(logits, -1).numpy()
-            classes = ['Cat','Dog']
-            st.header(classes[predict_output[0]])
+                    predict_output = tf.argmax(logits, -1).numpy()
+                    classes = ['Cat','Dog']
+                    st.header(classes[predict_output[0]])
 
-            predicted_class = classes[predict_output[0]]
+                    predicted_class = classes[predict_output[0]]
         
-            # Get the probability of the predicted class
-            probability = softmax.numpy()[0][predict_output[0]] * 100
-            # probability = predict_output[0][predicted_class_index] * 100 
-            st.header(f"Probability of a {predicted_class}: {probability:.4f}%")
+                    # Get the probability of the predicted class
+                    probability = softmax.numpy()[0][predict_output[0]] * 100
+                    # probability = predict_output[0][predicted_class_index] * 100 
+                    st.header(f"Probability of a {predicted_class}: {probability:.4f}%")
+
+        
+
+            
         
             
 

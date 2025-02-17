@@ -30,22 +30,22 @@ if genre == 'Camera':
 else:
     ImagePath = st.file_uploader("Choose a file")
 
-example_images = {
-    "Cat": "cat.png",  # Replace with actual paths
-    "Dog": "dog.png",  # Replace with actual paths
-    "Flower": "flower.png",  # Replace with actual path
-}
+# example_images = {
+#     "Cat": "cat.png",  # Replace with actual paths
+#     "Dog": "dog.png",  # Replace with actual paths
+#     "Flower": "flower.png",  # Replace with actual path
+# }
 
-st.write("Some Try Examples:")  # Text before the buttons
+# st.write("Some Try Examples:")  # Text before the buttons
 
-cols = st.columns(len(example_images))  # Create columns for horizontal layout
+# cols = st.columns(len(example_images))  # Create columns for horizontal layout
 
-for i, (image_name, image_path) in enumerate(example_images.items()):
-    with cols[i]:  # Place each button in its own column
-        if st.button(image_name):
-            ImagePath = image_path  # Store the selected image path
+# for i, (image_name, image_path) in enumerate(example_images.items()):
+#     with cols[i]:  # Place each button in its own column
+#         if st.button(image_name):
+#             ImagePath = image_path  # Store the selected image path
 
-st.markdown("---")  # Add a horizontal line
+# st.markdown("---")  # Add a horizontal line
 
 
 if ImagePath is not None:

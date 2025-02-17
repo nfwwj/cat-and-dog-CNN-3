@@ -21,8 +21,9 @@ import tensorflow as tf
 # loaded_model = model_from_json(loaded_model_json)
 
 loaded_model = tf.keras.models.load_model('catanddog.h5')
-
 st.title('Cats and Dogs Classification Using CNN')
+st.write('This CNN image classification model was created on Python, and trained on Xception. It boasts an accuracy of approximately 98%.')
+st.write('It is also my school project.')
     # Insert a line or divider
 st.markdown("---")
 
@@ -83,8 +84,8 @@ for idx, (column, image_path) in enumerate(zip(columns, image_paths)):
 
                 except Exception as e:
                     column.error(f"An error occurred during prediction: {e}")
-
-
+st.markdown("---")
+st.write('Have your own images?')
 num_classes = ['Cat','Dog']
 
 genre = st.radio(

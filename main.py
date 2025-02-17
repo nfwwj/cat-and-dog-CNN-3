@@ -61,16 +61,18 @@ def predict_image(image_path):
         return None, None, None
 
 
-# Example images display and prediction
+# Example images display and prediction (using st.button)
 for image_name, image_path in example_images.items():
     try:
-        img = Image.open(image_path) #Open image here for displaying
-        if st.image(img, width=250, caption=image_name, use_column_width=False, key=image_name):
-            predicted_class, probability, displayed_img = predict_image(image_path)  # Get image object
+        img = Image.open(image_path)
+
+        # Use st.button with the image inside it
+        if st.button(image=img, width=250, use_column_width=False, key=image_name):  # Key is important here
+            predicted_class, probability, displayed_img = predict_image(image_path)
             if predicted_class and probability:
                 st.header(f"Prediction: {predicted_class}")
                 st.header(f"Probability: {probability:.4f}%")
-                st.image(displayed_img, width=250) #Display the image again after prediction.
+                st.image(displayed_img, width=250)
 
     except FileNotFoundError:
         st.error(f"Image not found: {image_path}")
@@ -78,7 +80,6 @@ for image_name, image_path in example_images.items():
         st.error(f"Invalid image format: {image_path}")
     except Exception as e:
         st.error(f"An error occurred while loading the image: {e}")
-
 
 # Uploaded image processing
 if ImagePath is not None and genre == 'Browse Photos':  # Check if a file was uploaded

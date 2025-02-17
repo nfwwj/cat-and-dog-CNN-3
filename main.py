@@ -39,6 +39,17 @@ else:
 
 # ImagePath = st.file_uploader("Choose a file")
 
+example_images = {
+    "Cat": "path/to/cat.jpg",  # Replace with actual paths
+    "Dog": "path/to/dog.jpg",  # Replace with actual paths
+    "Flower": "path/to/flower.jpg",  # Replace with actual path
+}
+
+# Use st.columns to arrange buttons horizontally
+cols = st.columns(len(example_images))  # Create columns dynamically
+
+
+
 if ImagePath is not None:
 
     try:

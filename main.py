@@ -26,18 +26,19 @@ loaded_model = tf.keras.models.load_model('catanddog.h5')
 
 st.title('Cats and Dogs Classification Using CNN')
 
-# Initialize ImagePath in session state
+# Initialize ImagePath in session state (important!)
 if "ImagePath" not in st.session_state:
     st.session_state.ImagePath = None
+if "displayed_image" not in st.session_state:
+    st.session_state.displayed_image = None
 
-genre = st.radio(
-    "How You Want To Upload Your Image",
-    ('Browse Photos', 'Camera'))
+
+genre = st.radio("How You Want To Upload Your Image", ('Browse Photos', 'Camera'))
 
 if genre == 'Camera':
-    ImagePath = st.camera_input("Take a picture")
-else:
-    ImagePath = st.file_uploader("Choose a file")
+    st.session_state.ImagePath = st.camera_input("Take a picture")  # Store in session state
+elif genre == 'Browse Photos':
+    st.session_state.ImagePath = st.file_uploader("Choose a file")  # Store in session state
 
 example_images = {
     "Cat": "cat.png",  # Replace with actual paths
@@ -45,24 +46,13 @@ example_images = {
     "Flower": "flower.png",  # Replace with actual path
 }
 
-st.write("Some Try Examples:")  # Text before the buttons
+st.write("Some Try Examples:")
 
-#cols = st.columns(len(example_images))
-
-for i, (image_name, image_path) in enumerate(example_images.items()):
-        if st.button(image_name):  # Use image_name as the button label
-            st.session_state.ImagePath = image_path  # Store in session state
-            ImagePath = image_path  # Store the selected image path
-
-if ImagePath is not None:
-
-    try:
-        image_ = Image.open(ImagePath)
-
-        st.image(image_, width=250)
-
-    except UnidentifiedImageError:
-        st.write('Input Valid File Format !!!  [ jpeg, jpg, png only this format is supported ! ]')
+for image_name, image_path in example_images.items():
+    if st.button(image_name):
+        st.session_state.ImagePath = image_path  # Store in session state
+        st.session_state.displayed_image = Image.open(image_path)  # Store opened image in session state
+        st.image(st.session_state.displayed_image, width=250)  # Display image
 
 
 if st.button('Predict'):
@@ -87,10 +77,13 @@ if st.button('Predict'):
             probability = softmax.numpy()[0][predict_output[0]] * 100
             st.header(f"Probability of a {predicted_class}: {probability:.4f}%")
 
+            # Display the image again after prediction (from session state)
+            if st.session_state.displayed_image:
+                st.image(st.session_state.displayed_image, width=250)
+
         except (TypeError, UnidentifiedImageError):
             st.header('Input Valid File Format !!! [ jpeg, jpg, png only this format is supported ! ]')
         except Exception as e:
             st.error(f"An error occurred during prediction: {e}")
     else:
         st.header('Please Upload Your File or select an example!!!')
-

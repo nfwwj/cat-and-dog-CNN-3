@@ -26,18 +26,14 @@ loaded_model = tf.keras.models.load_model('catanddog.h5')
 
 st.title('Cats and Dogs Classification Using CNN')
 
-
-
-genre = st.radio(
-    "How You Want To Upload Your Image",
-    ('Browse Photos', 'Camera'))
+genre = st.radio("How You Want To Upload Your Image", ('Browse Photos', 'Camera'))
 
 if genre == 'Camera':
     ImagePath = st.camera_input("Take a picture")
-else:
+elif genre == 'Browse Photos':
     ImagePath = st.file_uploader("Choose a file")
-
-# ImagePath = st.file_uploader("Choose a file")
+else:
+    ImagePath = None  # Handle the case where no image is selected yet
 
 example_images = {
     "Cat": "cat.png",  # Replace with actual paths
@@ -45,93 +41,67 @@ example_images = {
     "Flower": "flower.png",  # Replace with actual path
 }
 
-# Use st.columns to arrange buttons horizontally
-cols = st.columns(len(example_images))  # Create columns dynamically
+cols = st.columns(len(example_images))
 
 for i, (image_name, image_path) in enumerate(example_images.items()):
-        if st.button(image_name):  # Use image_name as the button label
-            image_ = Image.open(image_path)
+    with cols[i]:
+        img = Image.open(image_path)
+        st.image(img, width=250, caption=image_name, use_column_width=False) # Display image
 
-            st.image(image_, width=250)
-
+        if st.button("Predict " + image_name):  # Predict button for each image
             try:
-                if st.button('Predict'):
-                    loaded_single_image = tf.keras.utils.load_img(ImagePath,
-                                              color_mode='rgb',
-                                              target_size=(224, 224)) #edit to model input size
-        
-                    test_image = tf.keras.utils.img_to_array(loaded_single_image)
-                    test_image /= 255
+                loaded_single_image = tf.keras.utils.load_img(
+                    image_path, color_mode='rgb', target_size=(224, 224)
+                )
+                test_image = tf.keras.utils.img_to_array(loaded_single_image)
+                test_image /= 255
 
-                    test_image = np.expand_dims(test_image, axis=0)
+                test_image = np.expand_dims(test_image, axis=0)
 
-        
+                logits = loaded_model(test_image)
+                softmax = tf.nn.softmax(logits)
 
-                    logits = loaded_model(test_image)
-        
-                    softmax = tf.nn.softmax(logits)
+                predict_output = tf.argmax(logits, -1).numpy()
+                classes = ['Cat', 'Dog']
+                st.header(classes[predict_output[0]])
 
-                    predict_output = tf.argmax(logits, -1).numpy()
-                    classes = ['Cat','Dog']
-                    st.header(classes[predict_output[0]])
+                predicted_class = classes[predict_output[0]]
+                probability = softmax.numpy()[0][predict_output[0]] * 100
+                st.header(f"Probability of a {predicted_class}: {probability:.4f}%")
 
-                    predicted_class = classes[predict_output[0]]
-        
-                    # Get the probability of the predicted class
-                    probability = softmax.numpy()[0][predict_output[0]] * 100
-                    # probability = predict_output[0][predicted_class_index] * 100 
-                    st.header(f"Probability of a {predicted_class}: {probability:.4f}%")
-
-        
-
-            
-        
-            
+            except (TypeError, UnidentifiedImageError):
+                st.header('Input Valid File Format !!! [ jpeg, jpg, png only this format is supported ! ]')
+            except Exception as e:
+                st.error(f"An error occurred during prediction: {e}")
 
 
-if ImagePath is not None:
-
+# Uploaded Image Prediction
+if ImagePath is not None and genre == 'Browse Photos': #Added condition to check if the user selected an image
     try:
         image_ = Image.open(ImagePath)
-
         st.image(image_, width=250)
 
-    except UnidentifiedImageError:
-        st.write('Input Valid File Format !!!  [ jpeg, jpg, png only this format is supported ! ]')
+        if st.button('Predict Uploaded'):  # Separate predict button for uploaded image
+            loaded_single_image = tf.keras.utils.load_img(
+                ImagePath, color_mode='rgb', target_size=(224, 224)
+            )
+            test_image = tf.keras.utils.img_to_array(loaded_single_image)
+            test_image /= 255
 
+            test_image = np.expand_dims(test_image, axis=0)
 
-try:
-    if st.button('Predict'):
-        loaded_single_image = tf.keras.utils.load_img(ImagePath,
-                                              color_mode='rgb',
-                                              target_size=(224, 224)) #edit to model input size
-        
-        test_image = tf.keras.utils.img_to_array(loaded_single_image)
-        test_image /= 255
+            logits = loaded_model(test_image)
+            softmax = tf.nn.softmax(logits)
 
-        test_image = np.expand_dims(test_image, axis=0)
+            predict_output = tf.argmax(logits, -1).numpy()
+            classes = ['Cat', 'Dog']
+            st.header(classes[predict_output[0]])
 
-        
+            predicted_class = classes[predict_output[0]]
+            probability = softmax.numpy()[0][predict_output[0]] * 100
+            st.header(f"Probability of a {predicted_class}: {probability:.4f}%")
 
-        logits = loaded_model(test_image)
-        
-        softmax = tf.nn.softmax(logits)
-
-        predict_output = tf.argmax(logits, -1).numpy()
-        classes = ['Cat','Dog']
-        st.header(classes[predict_output[0]])
-
-        predicted_class = classes[predict_output[0]]
-        
-        # Get the probability of the predicted class
-        probability = softmax.numpy()[0][predict_output[0]] * 100
-        # probability = predict_output[0][predicted_class_index] * 100 
-        st.header(f"Probability of a {predicted_class}: {probability:.4f}%")
-        
-
-except TypeError:
-    st.header('Please Upload Your File !!!')
-
-except UnidentifiedImageError:
-    st.header('Input Valid File !!!')
-
+    except (TypeError, UnidentifiedImageError):
+        st.header('Input Valid File Format !!! [ jpeg, jpg, png only this format is supported ! ]')
+    except Exception as e:
+        st.error(f"An error occurred during prediction: {e}")

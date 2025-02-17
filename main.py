@@ -59,8 +59,8 @@ for idx, (column, image_path) in enumerate(zip(columns, image_paths)):
     if resized_image:  # Only proceed if image was opened successfully
         column.image(resized_image, use_column_width=True)
 
-        if column.button(f"Predict {idx + 1}"):
-            with st.spinner(f"Predicting image {idx + 1}..."):
+        if column.button(f"Predict"):
+            with st.spinner(f"Predicting image..."):
                 try:
                     loaded_single_image = tf.keras.utils.load_img(
                         image_path,  # Use image_path directly

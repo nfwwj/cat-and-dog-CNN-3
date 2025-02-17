@@ -57,7 +57,7 @@ for idx, (column, image_path) in enumerate(zip(columns, image_paths)):
     resized_image = resize_image(image_path, image_width, image_height)
 
     if resized_image:  # Only proceed if image was opened successfully
-        column.image(resized_image, use_column_width=True)
+        column.image(resized_image, use_container_width=True)
 
         if column.button(f"Predict {idx + 1}"):
             with st.spinner(f"Predicting image {idx + 1} ..."):

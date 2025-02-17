@@ -36,7 +36,7 @@ selection = random.sample(file_list, 9)
 
 cols = cycle(st.columns(3, gap="small"))
 for idx, picture in enumerate(selection):
-    next(cols).image(Image.open(picture), use_column_width = True)
+    next(cols).image(Image.open(picture), use_container_width = True)
     
 st.markdown("---")
 

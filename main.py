@@ -61,18 +61,26 @@ def predict_image(image_path):
         return None, None, None
 
 
-# Example images display and prediction (using st.button)
+# Store the selected image path in session state
+if "selected_image_path" not in st.session_state:
+    st.session_state.selected_image_path = None
+
 for image_name, image_path in example_images.items():
     try:
         img = Image.open(image_path)
 
-        # Use st.button with the image inside it
-        if st.button(image=img, width=250, use_column_width=False, key=image_name):  # Key is important here
+        # Display the image
+        st.image(img, width=250, caption=image_name, use_column_width=False, key=image_name)
+
+        # Add a hidden button next to the image (workaround)
+        if st.button("Predict " + image_name, key="button_" + image_name):  # Unique key for each button
+            st.session_state.selected_image_path = image_path
             predicted_class, probability, displayed_img = predict_image(image_path)
             if predicted_class and probability:
                 st.header(f"Prediction: {predicted_class}")
                 st.header(f"Probability: {probability:.4f}%")
                 st.image(displayed_img, width=250)
+
 
     except FileNotFoundError:
         st.error(f"Image not found: {image_path}")

@@ -45,16 +45,36 @@ example_images = {
     "Flower": "flower.png",  # Replace with actual path
 }
 
+st.markdown(
+    """
+    <style>
+    .example-buttons {
+        display: flex;
+        justify-content: center; /* Center the buttons */
+    }
+    .example-buttons button {
+        margin: 0 10px; /* Add some margin between buttons */
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
+
 st.write("Some Try Examples:")  # Text before the buttons
 
+st.markdown("<div class='example-buttons'>", unsafe_allow_html=True)  # Start the div
 
-cols = st.columns(len(example_images))  # Create columns for horizontal layout
+
+#cols = st.columns(len(example_images))  # Create columns for horizontal layout
 
 for i, (image_name, image_path) in enumerate(example_images.items()):
-    with cols[i]:  # Place each button in its own column
-        if st.button(image_name):
-                st.session_state.ImagePath = image_path  # Store in session state
-                ImagePath = image_path  # Store the selected image path
+    #with cols[i]:  # Place each button in its own column
+    if st.button(image_name):
+        st.session_state.ImagePath = image_path  # Store in session state
+        ImagePath = image_path  # Store the selected image path
+
+st.markdown("</div>", unsafe_allow_html=True)  # Close the div
 
 st.markdown("---")  # Add a horizontal line
 

@@ -23,6 +23,67 @@ import tensorflow as tf
 loaded_model = tf.keras.models.load_model('catanddog.h5')
 
 st.title('Cats and Dogs Classification Using CNN')
+    # Insert a line or divider
+st.markdown("---")
+
+st.write('Try some examples')
+
+# Load your Bird images (replace these paths with your actual file paths)
+image_paths = ["cat.png", "dog.png", "flower.png"]  # Example paths
+num_classes = ['Cat', 'Dog']  # Class names
+
+# Function to resize the image (for display purposes only)
+def resize_image(image_path, width, height):
+    try:  # Handle potential image opening errors
+        image = Image.open(image_path)
+        resized_image = image.resize((width, height))
+        return resized_image
+    except Exception as e:
+        st.error(f"Error opening image {image_path}: {e}")
+        return None  # Return None if image opening fails
+
+image_width = 400
+image_height = 400
+
+# Use st.columns to create columns
+columns = st.columns(len(image_paths))
+
+# Mapping of image indices to results (you might not need this)
+results = {}
+
+# Display each image in a column with a "Detect" button underneath
+for idx, (column, image_path) in enumerate(zip(columns, image_paths)):
+    resized_image = resize_image(image_path, image_width, image_height)
+
+    if resized_image:  # Only proceed if image was opened successfully
+        column.image(resized_image, caption=f"Image {idx + 1}", use_column_width=True)
+
+        if column.button(f"Predict {idx + 1}"):
+            with st.spinner(f"Predicting image {idx + 1}..."):
+                try:
+                    loaded_single_image = tf.keras.utils.load_img(
+                        image_path,  # Use image_path directly
+                        color_mode='rgb',
+                        target_size=(224, 224)
+                    )
+
+                    test_image = tf.keras.utils.img_to_array(loaded_single_image)
+                    test_image /= 255
+                    test_image = np.expand_dims(test_image, axis=0)
+
+                    logits = loaded_model(test_image)
+                    softmax = tf.nn.softmax(logits)
+
+                    predict_output = tf.argmax(logits, -1).numpy()
+                    predicted_class = num_classes[predict_output[0]]  # Use num_classes
+                    probability = softmax.numpy()[0][predict_output[0]] * 100
+
+                    column.write(f"**Prediction:** {predicted_class}")  # Bold prediction
+                    column.write(f"**Probability:** {probability:.4f}%")  # Bold probability
+
+                except Exception as e:
+                    column.error(f"An error occurred during prediction: {e}")
+
 
 num_classes = ['Cat','Dog']
 

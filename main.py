@@ -40,7 +40,7 @@ for idx, picture in enumerate(selection):
     
 st.markdown("---")
 
-st.write('Try some examples')
+st.title('Try some examples')
 
 # Load your Bird images (replace these paths with your actual file paths)
 image_paths = ["cat.png", "dog.png", "flower.png"]  # Example paths
@@ -98,7 +98,7 @@ for idx, (column, image_path) in enumerate(zip(columns, image_paths)):
                 except Exception as e:
                     column.error(f"An error occurred during prediction: {e}")
 st.markdown("---")
-st.write('Have your own images?')
+st.title('Have your own image?')
 num_classes = ['Cat','Dog']
 
 genre = st.radio(

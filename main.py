@@ -26,6 +26,13 @@ loaded_model = tf.keras.models.load_model('catanddog.h5')
 
 st.title('Cats and Dogs Classification Using CNN')
 
+genre = st.radio("How You Want To Upload Your Image",('Browse Photos', 'Camera'))
+
+if genre == 'Camera':
+    ImagePath = st.camera_input("Take a picture")
+else:
+    ImagePath = st.file_uploader("Choose a file")
+
 # Dictionary to store example image paths
 example_images = {
     "Cat": "cat.png",  # Replace with actual paths
@@ -72,13 +79,6 @@ for image_name, image_path in example_images.items():
             if predicted_class and probability:
                 st.header(f"Prediction: {predicted_class}")
                 st.header(f"Probability: {probability:.4f}%")
-
-genre = st.radio("How You Want To Upload Your Image",('Browse Photos', 'Camera'))
-
-if genre == 'Camera':
-    ImagePath = st.camera_input("Take a picture")
-else:
-    ImagePath = st.file_uploader("Choose a file")
 
 # ImagePath = st.file_uploader("Choose a file")
 

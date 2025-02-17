@@ -26,18 +26,18 @@ loaded_model = tf.keras.models.load_model('catanddog.h5')
 
 st.title('Cats and Dogs Classification Using CNN')
 
-# Initialize ImagePath in session state
+# Initialize session state variables
 if "ImagePath" not in st.session_state:
     st.session_state.ImagePath = None
+if "displayed_image" not in st.session_state:
+    st.session_state.displayed_image = None
 
-genre = st.radio(
-    "How You Want To Upload Your Image",
-    ('Browse Photos', 'Camera'))
+genre = st.radio("How You Want To Upload Your Image", ('Browse Photos', 'Camera'))
 
 if genre == 'Camera':
-    ImagePath = st.camera_input("Take a picture")
-else:
-    ImagePath = st.file_uploader("Choose a file")
+    st.session_state.ImagePath = st.camera_input("Take a picture")
+elif genre == 'Browse Photos':
+    st.session_state.ImagePath = st.file_uploader("Choose a file")
 
 example_images = {
     "Cat": "cat.png",  # Replace with actual paths
@@ -45,52 +45,41 @@ example_images = {
     "Flower": "flower.png",  # Replace with actual path
 }
 
+# HTML/CSS for buttons
 st.markdown(
     """
     <style>
     .example-buttons {
         display: flex;
-        justify-content: center; /* Center the buttons */
+        justify-content: center;
     }
     .example-buttons button {
-        margin: 0 10px; /* Add some margin between buttons */
+        margin: 0 10px;
     }
     </style>
     """,
     unsafe_allow_html=True,
 )
 
+st.write("Some Try Examples:")
 
-st.write("Some Try Examples:")  # Text before the buttons
+st.markdown("<div class='example-buttons'>", unsafe_allow_html=True)
 
-st.markdown("<div class='example-buttons'>", unsafe_allow_html=True)  # Start the div
-
-
-#cols = st.columns(len(example_images))  # Create columns for horizontal layout
-
-for i, (image_name, image_path) in enumerate(example_images.items()):
-    #with cols[i]:  # Place each button in its own column
+for image_name, image_path in example_images.items():
     if st.button(image_name):
-        st.session_state.ImagePath = image_path  # Store in session state
-        ImagePath = image_path  # Store the selected image path
+        st.session_state.ImagePath = image_path
+        try:
+            st.session_state.displayed_image = Image.open(image_path)
+        except Exception as e:
+            st.error(f"Error opening image: {e}")
+        st.image(st.session_state.displayed_image, width=250)  # Display image
 
-st.markdown("</div>", unsafe_allow_html=True)  # Close the div
+st.markdown("</div>", unsafe_allow_html=True)
 
-st.markdown("---")  # Add a horizontal line
-
-if ImagePath is not None:
-
-    try:
-        image_ = Image.open(ImagePath)
-
-        st.image(image_, width=250)
-
-    except UnidentifiedImageError:
-        st.write('Input Valid File Format !!!  [ jpeg, jpg, png only this format is supported ! ]')
-
+st.markdown("---")
 
 if st.button('Predict'):
-    if st.session_state.ImagePath is not None:  # Check session state
+    if st.session_state.ImagePath is not None:
         try:
             loaded_single_image = tf.keras.utils.load_img(
                 st.session_state.ImagePath, color_mode='rgb', target_size=(224, 224)
@@ -104,17 +93,19 @@ if st.button('Predict'):
             softmax = tf.nn.softmax(logits)
 
             predict_output = tf.argmax(logits, -1).numpy()
-            classes = ['Cat', 'Dog']
+            classes = ['Cat', 'Dog']  # Make sure 'classes' is defined
             st.header(classes[predict_output[0]])
 
             predicted_class = classes[predict_output[0]]
             probability = softmax.numpy()[0][predict_output[0]] * 100
             st.header(f"Probability of a {predicted_class}: {probability:.4f}%")
 
-        except (TypeError, UnidentifiedImageError):
-            st.header('Input Valid File Format !!! [ jpeg, jpg, png only this format is supported ! ]')
+            if st.session_state.displayed_image:
+                st.image(st.session_state.displayed_image, width=250)  # Redisplay
+
+        except (TypeError, UnidentifiedImageError) as e:
+            st.error(f"Invalid file format or error: {e}") #More specific error message
         except Exception as e:
             st.error(f"An error occurred during prediction: {e}")
     else:
         st.header('Please Upload Your File or select an example!!!')
-

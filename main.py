@@ -32,13 +32,13 @@ genre = st.radio(
     "How You Want To Upload Your Image",
     ('Browse Photos', 'Camera'))
 
-if genre == 'Camera':
-    ImagePath = st.camera_input("Take a picture")
+# if genre == 'Camera':
+#     ImagePath = st.camera_input("Take a picture")
     
-elif genre == 'Browse Photos':
-    ImagePath = st.file_uploader("Choose a file")
-else:
-    ImagePath = None  # Handle the case where no image is selected yet
+# elif genre == 'Browse Photos':
+#     ImagePath = st.file_uploader("Choose a file")
+# else:
+#     ImagePath = None  # Handle the case where no image is selected yet
 
 example_images = {
     "Cat": "cat.png",  # Replace with actual paths
@@ -49,8 +49,6 @@ example_images = {
 st.write("Some Try Examples:")  # Text before the buttons
 
 #cols = st.columns(len(example_images))
-
-selected_image = None #Variable to store the path of the selected image
 
 for i, (image_name, image_path) in enumerate(example_images.items()):
         if st.button(image_name):  # Use image_name as the button label

@@ -34,10 +34,27 @@ genre = st.radio(
 
 if genre == 'Camera':
     ImagePath = st.camera_input("Take a picture")
-else:
+    
+elif genre == 'Browse Photos':
     ImagePath = st.file_uploader("Choose a file")
+else:
+    ImagePath = None  # Handle the case where no image is selected yet
 
-# ImagePath = st.file_uploader("Choose a file")
+example_images = {
+    "Cat": "cat.png",  # Replace with actual paths
+    "Dog": "dog.png",  # Replace with actual paths
+    "Flower": "flower.png",  # Replace with actual path
+}
+
+st.write("Some Try Examples:")  # Text before the buttons
+
+#cols = st.columns(len(example_images))
+
+selected_image = None #Variable to store the path of the selected image
+
+for i, (image_name, image_path) in enumerate(example_images.items()):
+        if st.button(image_name):  # Use image_name as the button label
+            ImagePath = image_path  # Store the selected image path
 
 if ImagePath is not None:
 

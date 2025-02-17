@@ -14,6 +14,8 @@ from tensorflow.keras.preprocessing import image
 from PIL import UnidentifiedImageError
 from PIL import Image
 import tensorflow as tf
+from pathlib import Path
+
 
 # json_file = open('catanddog.json', 'r')
 # loaded_model_json = json_file.read()

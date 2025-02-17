@@ -40,9 +40,9 @@ else:
 # ImagePath = st.file_uploader("Choose a file")
 
 example_images = {
-    "Cat": "path/to/cat.jpg",  # Replace with actual paths
-    "Dog": "path/to/dog.jpg",  # Replace with actual paths
-    "Flower": "path/to/flower.jpg",  # Replace with actual path
+    "Cat": "cat.png",  # Replace with actual paths
+    "Dog": "dog.png",  # Replace with actual paths
+    "Flower": "flower.png",  # Replace with actual path
 }
 
 # Use st.columns to arrange buttons horizontally

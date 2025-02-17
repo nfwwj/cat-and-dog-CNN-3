@@ -26,12 +26,9 @@ loaded_model = tf.keras.models.load_model('catanddog.h5')
 
 st.title('Cats and Dogs Classification Using CNN')
 
-# Initialize ImagePath in session state (important!)
+# Initialize ImagePath in session state
 if "ImagePath" not in st.session_state:
     st.session_state.ImagePath = None
-if "displayed_image" not in st.session_state:
-    st.session_state.displayed_image = None
-
 
 genre = st.radio("How You Want To Upload Your Image", ('Browse Photos', 'Camera'))
 
@@ -51,9 +48,7 @@ st.write("Some Try Examples:")
 for image_name, image_path in example_images.items():
     if st.button(image_name):
         st.session_state.ImagePath = image_path  # Store in session state
-        st.session_state.displayed_image = Image.open(image_path)  # Store opened image in session state
-        st.image(st.session_state.displayed_image, width=250)  # Display image
-
+        ImagePath = image_path
 
 if st.button('Predict'):
     if st.session_state.ImagePath is not None:  # Check session state
@@ -76,10 +71,6 @@ if st.button('Predict'):
             predicted_class = classes[predict_output[0]]
             probability = softmax.numpy()[0][predict_output[0]] * 100
             st.header(f"Probability of a {predicted_class}: {probability:.4f}%")
-
-            # Display the image again after prediction (from session state)
-            if st.session_state.displayed_image:
-                st.image(st.session_state.displayed_image, width=250)
 
         except (TypeError, UnidentifiedImageError):
             st.header('Input Valid File Format !!! [ jpeg, jpg, png only this format is supported ! ]')

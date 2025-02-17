@@ -26,6 +26,53 @@ loaded_model = tf.keras.models.load_model('catanddog.h5')
 
 st.title('Cats and Dogs Classification Using CNN')
 
+# Dictionary to store example image paths
+example_images = {
+    "Cat": "examples/cat.png",  # Replace with actual paths
+    "Dog": "examples/dog.png",  # Replace with actual paths
+    "Flower": "examples/flower.png",  # Replace with actual path
+}
+
+# Store the selected image path in session state
+if "selected_image_path" not in st.session_state:
+    st.session_state.selected_image_path = None
+
+def predict_image(image_path):
+    try:
+        loaded_single_image = tf.keras.utils.load_img(
+            image_path, color_mode='rgb', target_size=(224, 224)
+        )
+        test_image = tf.keras.utils.img_to_array(loaded_single_image)
+        test_image /= 255.0  # Normalize
+
+        test_image = np.expand_dims(test_image, axis=0)
+
+        logits = loaded_model(test_image)
+        softmax = tf.nn.softmax(logits)
+
+        predict_output = tf.argmax(logits, -1).numpy()
+        predicted_class = classes[predict_output[0]]
+        probability = softmax.numpy()[0][predict_output[0]] * 100
+
+        return predicted_class, probability
+    except Exception as e:
+        st.error(f"An error occurred during prediction: {e}")
+        return None, None
+
+
+# Display images as buttons and handle predictions
+for image_name, image_path in example_images.items():
+    try:
+        img = Image.open(image_path)
+
+        # The key is to use st.image as a button and store the path in session state
+        if st.image(img, width=250, caption=image_name, use_column_width=False, key=image_name): #Added key to image to make it unique
+            st.session_state.selected_image_path = image_path #Store the path in the session state.
+
+            predicted_class, probability = predict_image(image_path) #Perform prediction here.
+            if predicted_class and probability:
+                st.header(f"Prediction: {predicted_class}")
+                st.header(f"Probability: {probability:.4f}%")
 
 
 genre = st.radio(

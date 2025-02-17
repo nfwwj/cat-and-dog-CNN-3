@@ -15,22 +15,22 @@ from PIL import UnidentifiedImageError
 from PIL import Image
 import tensorflow as tf
 
-json_file = open('catanddog.json', 'r')
-loaded_model_json = json_file.read()
-json_file.close()
-loaded_model = model_from_json(loaded_model_json)
+# json_file = open('catanddog.json', 'r')
+# loaded_model_json = json_file.read()
+# json_file.close()
+# loaded_model = model_from_json(loaded_model_json)
 
-loaded_model.load_weights("catanddog.h5")
-# print("Loaded model from disk")
+loaded_model = tf.keras.models.load_model('catanddog.h5')
 
 st.title('Cats and Dogs Classification Using CNN')
 
 num_classes = ['Cat','Dog']
 
 
-ImagePath = st.file_uploader("Choose a file")
-
-# ImagePath = st.file_uploader("Choose a file")
+if genre == 'Camera':
+    ImagePath = st.camera_input("Take a picture")
+else:
+    ImagePath = st.file_uploader("Choose a file")
 
 if ImagePath is not None:
 

@@ -28,9 +28,9 @@ st.title('Cats and Dogs Classification Using CNN')
 
 # Dictionary to store example image paths
 example_images = {
-    "Cat": "examples/cat.png",  # Replace with actual paths
-    "Dog": "examples/dog.png",  # Replace with actual paths
-    "Flower": "examples/flower.png",  # Replace with actual path
+    "Cat": "cat.png",  # Replace with actual paths
+    "Dog": "dog.png",  # Replace with actual paths
+    "Flower": "flower.png",  # Replace with actual path
 }
 
 # Store the selected image path in session state
@@ -60,7 +60,6 @@ def predict_image(image_path):
         return None, None
 
 
-# Display images as buttons and handle predictions
 for image_name, image_path in example_images.items():
     try:
         img = Image.open(image_path)
@@ -74,10 +73,7 @@ for image_name, image_path in example_images.items():
                 st.header(f"Prediction: {predicted_class}")
                 st.header(f"Probability: {probability:.4f}%")
 
-
-genre = st.radio(
-    "How You Want To Upload Your Image",
-    ('Browse Photos', 'Camera'))
+genre = st.radio("How You Want To Upload Your Image",('Browse Photos', 'Camera'))
 
 if genre == 'Camera':
     ImagePath = st.camera_input("Take a picture")

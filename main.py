@@ -26,6 +26,8 @@ loaded_model = tf.keras.models.load_model('catanddog.h5')
 
 st.title('Cats and Dogs Classification Using CNN')
 
+st.markdown("---")  # Add a horizontal line
+
 # Initialize ImagePath in session state
 if "ImagePath" not in st.session_state:
     st.session_state.ImagePath = None

@@ -26,19 +26,14 @@ loaded_model = tf.keras.models.load_model('catanddog.h5')
 
 st.title('Cats and Dogs Classification Using CNN')
 
-
-
 genre = st.radio(
     "How You Want To Upload Your Image",
     ('Browse Photos', 'Camera'))
 
-# if genre == 'Camera':
-#     ImagePath = st.camera_input("Take a picture")
-    
-# elif genre == 'Browse Photos':
-#     ImagePath = st.file_uploader("Choose a file")
-# else:
-#     ImagePath = None  # Handle the case where no image is selected yet
+if genre == 'Camera':
+    ImagePath = st.camera_input("Take a picture")
+else:
+    ImagePath = st.file_uploader("Choose a file")
 
 example_images = {
     "Cat": "cat.png",  # Replace with actual paths
